@@ -94,7 +94,8 @@ struct deep_thought_result the_ultimate_question() {
     }
     answer.timeElapsedInYears++;
   }
-  return THE_ULTIMATE_ANSWER;
+  answer.theAnswer = THE_ULTIMATE_ANSWER;
+  return answer;
 }
 
 int main(int argc, char** argv) {
