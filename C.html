@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0043) -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>howderek coding style</title>
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css">
+  <style>
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 1.1em;
+      line-height: 1.35;
+      color: #111;
+      background: #eee;
+    }
+
+    .content {
+      max-width: 700px;
+      margin: 20px 100px 0px 10%;
+    }
+
+    pre {
+      color: #fff;
+      background: #23241f;
+      font-family: "Hack", "Source Code Pro", "Monaco", monospace;
+      display: block;
+      width: 100%;
+      padding: 1em 20px;
+    }
+
+    a {
+      text-decoration: none;
+      color: #0ac;
+    }
+
+    h1 {
+      margin-top: 1em;
+      font-size: 3.2em;
+    }
+
+    h2 {
+      font-size: 2.5em;
+      margin-top: 2em;
+    }
+
+    h3 {
+      margin-top: 2em;
+    }
+
+    small {
+      display: block;
+      padding-bottom: 50px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <h1>howderek C coding style</h1>
+    <h2>At a Glance</h2>
+    <pre><code class="c">
+#include &lt;unistd.h&gt;
+#include "libhowderek/howderek.h"
+
+#define THE_ULTIMATE_ANSWER 42
+
+struct deep_thought_result {         // structs_underscores
+  int      theAnswer;                // align struct members
+  long int timeElapsedInYears;       // align comments
+}; // don't typedef structs
+
+
+/**
+ * Use Doxygen comments to describe functions.
+ * 
+ * \return the answer to life, the universe, and everything
+ */
+struct deep_thought_result the_ultimate_question() {
+  struct deep_thought_result answer;
+  answer.timeElapsedInYears = 0;
+  while (answer.timeElapsedInYears < 7500000) { // K&amp;R bracket style
+    int days = 0;
+    while (days < 365) {
+      sleep(60 * 60 * 24);
+      days++;
+    }
+    answer.timeElapsedInYears++;
+  }
+  return THE_ULTIMATE_ANSWER;
+}
+
+int main(int argc, char** argv) {
+  struct deep_thought_result theUltimateAnswer;
+  // Calculate the ultimate answer
+  theUltimateAnswer = the_ultimate_question();
+  // Return the meaning of life, the universe, and everything
+  return theUltimateAnswer.theAnswer;
+}
+    </pre></code>
+    <h2>Contents</h2>
+    <h3>Names</h3>
+    <ul>
+      <li><a href="#NameSensible">
+      Use sensible, descriptive names</a>
+      </li>
+      <li><a href="#NameEnglish">
+    Only use English names</a>
+      </li>
+      <li><a href="#NameLength">
+    Variables with a large scope shall have long names, variables with a small scope can have short names</a>
+      </li>
+      <li><a href="#UseNamePrefix">
+    Use name prefixes for identifiers declared in different
+    modules</a>
+      </li>
+    </ul>
+    <h3>Indentation and Spacing</h3>
+    <ul>
+      <li><a href="#BracesKnR">
+    Braces shall follow "K&amp;R Bracing Style"</a>
+      </li>
+      <li><a href="#IndentLevel">
+    Braces shall be indented 2 columns to the right of the starting position of the enclosing statement or declaration</a>
+      </li>
+      <li><a href="#FunctionParameterLineUp">
+    Function parameters shall be lined up with one parameter per line</a>
+      </li>
+      <li><a href="#BracesLoop">
+    Loop and conditional statements shall always have brace enclosed
+    sub-statements</a>
+      </li>
+      <li><a href="#BracesEmpty">
+    Braces without any contents may be placed on the same line</a>
+      </li>
+      <li><a href="#StmtPerLine">
+    Each statement shall be placed on a line on its own</a>
+      </li>
+      <li><a href="#ObjectPerDecl">
+    Declare each variable in a separate declaration</a>
+      </li>
+      <li><a href="#PtrSpace">
+    For declaring pointers and reference the "*" and "&amp;" shall
+    be surrounded by spaces on both sides</a>
+      </li>
+      <li><a href="#OperSpace">
+    All binary arithmetic, bitwise and assignment operators and the ternary
+    conditional operator (?:) shall be surrounded by spaces; the comma operator
+    shall be followed by a space but not preceded; all other operators shall
+    not be used with spaces</a>
+      </li>
+      <li><a href="#LineLength">
+    Lines shall not exceed 78 characters</a>
+      </li>
+      <li><a href="#TabsAvoid">
+    Do not use tabs</a>
+      </li>
+    </ul>
+    <h3>Comments</h3>
+    <ul>
+      <li><a href="#CommentEnglish">
+    Comments shall be written in English</a>
+      </li>
+      <li><a href="#CommentDoxygen">
+    Use Doxygen comments</a>
+      </li>
+      <li><a href="#CommentMultiLine">
+    Multiple line comments shall be split in one comment per line,
+    each having the /* and */ markers on the same line</a>
+      </li>
+      <li><a href="#CommentPlacement">
+    All comments shall be placed above the line the comment
+    describes, indented identically</a>
+      </li>
+      <li><a href="#CommentIfDef">
+    Use <tt>#ifdef</tt> instead of /* ... */ to comment out blocks
+    of code</a>
+      </li>
+      <li><a href="#CommentFunction">
+    Every function shall have a comment that describes its purpose</a>
+      </li>
+    </ul>
+    <h3>Files</h3>
+    <ul>
+      <li><a href="#OneVisibleFunction">
+    There shall only be one externally visible function defined in
+    each header file</a>
+      </li>
+      <li><a href="#FileNameCase">
+    File name shall be treated as case sensitive</a>
+      </li>
+      <li><a href="#CFileExt">
+    C source files shall have extension "<tt>.c</tt>"</a>
+      </li>
+      <li><a href="#CHeaderExt">
+    C header files shall have extension "<tt>.h</tt>"</a>
+      </li>
+      <li><a href="#InlineFunctionDefineSeparate">
+    Inline functions shall be declared in header files and defined in inline
+    definition files</a>
+      </li>
+      <li><a href="#HeaderIncludeGuard">
+    Header files must have include guards</a>
+      </li>
+      <li><a href="#IncludeGuardName">
+    The name of the macro used in the include guard shall have the same name
+    as the file (excluding the extension) followed by the suffix "_H"</a>
+      </li>
+      <li><a href="#HeaderSelfContained">
+    Header files shall be self-contained</a>
+      </li>
+      <li><a href="#HeaderSystemUser">
+    System header files shall be included with &lt;&gt; and project
+    headers with ""</a>
+      </li>
+      <li><a href="#IncludeFirst">
+    Put <tt>#include</tt> directives at the top of files</a>
+      </li>
+      <li><a href="#IncludeAbsoluteAvoid">
+    Do not use absolute directory names in <tt>#include</tt>
+    directives</a>
+      </li>
+      <li><a href="#IncludeRelativeAvoid">
+    Do not use relative directory names in <tt>#include</tt>
+    directives</a>
+      </li>
+    </ul>
+    <h3>Declarations</h3>
+    <ul>
+      <li><a href="#FunctionParameterNames">
+    Provide names of parameters in function declarations</a>
+      </li>
+      <li><a href="#FunctionReturnType">
+    Always provide the return type explicitly</a>
+      </li>
+      <li><a href="#FunctionPointerTypedef">
+    Use a typedef to define a pointer to a function</a>
+      </li>
+      <li><a href="#GlobalVarAvoid">
+    Do not use global variables</a>
+      </li>
+    </ul>
+    <h3>Statements</h3>
+    <ul>
+      <li><a href="#GotoForbid">
+    Never use gotos</a>
+      </li>
+      <li><a href="#BreakAvoid">
+    Do not use <tt>break</tt> in loops</a>
+      </li>
+      <li><a href="#ContinueAvoid">
+    Do not use <tt>continue</tt> in loops</a>
+      </li>
+      <li><a href="#FunctionOneExit">
+    Only have one return in a function</a>
+      </li>
+      <li><a href="#SwitchDefault">
+    All switch statements shall have a default label</a>
+      </li>
+      <li><a href="#DoWhileAvoid">
+    Do not use <tt>do-while</tt> loops</a>
+      </li>
+    </ul>
+    <h3>Other Typographical Issues</h3>
+    <ul>
+      <li><a href="#MagicNumberAvoid">
+    Do not use literal numbers other than 0 and 1</a>
+      </li>
+      <li><a href="#AssertEncourage">
+    Use plenty of assertions</a>
+      </li>
+      <li><a href="#ConditionsExplicitBool">
+    Do not rely on implicit conversion to bool in conditions</a>
+      </li>
+    </ul>
+    
+    <h2>Names</h2>
+    <div id="NameSensible">
+      <h3>Use sensible, descriptive names</h3> Do not use short cryptic names or names based on internal jokes. It shall be easy to type div id without looking up how it is spelt.
+    </div>
+    <p><div id="NameSensible">
+    Exception: Loop variables and variables with a small scope (less
+    than 20 lines) may have short names to save space if the purpose of
+    that variable is obvious.
+    </div><div id="NameEnglish">
+    </div></p>
+    <h3><div id="NameEnglish">Only use English names</div></h3><div id="NameEnglish">
+    It is confusing when mixing languages for names.
+    English is the preferred language because of its spread in the
+    software market and because most libraries used already use English.
+    </div>
+    <div id="NameLength">
+      <h3>Variables with a large scope shall have long names, variables with a small scope can have short names</h3> Scratch variables used for temporary storage or indices are best kept short. A programmer reading such variables shall be able to assume that its value is not used outside a few lines of code. Common scratch variables for integers are
+      <tt>i</tt>,
+      <tt>j</tt>,
+      <tt>k</tt>,
+      <tt>m</tt>,
+      <tt>n</tt> and for characters
+      <tt>c</tt> and
+      <tt>d</tt>.
+    </div>
+    <div id="UseNamePrefix">
+      <h3>Use name prefixes for identifiers declared in different
+    modules</h3> This avoids name clashes.
+      <h2>Indentation and Spacing</h2>
+    </div>
+    <div id="BracesKnR">
+      <h3>Braces shall follow "K&amp;R Bracing Style"</h3> The K&amp;R Bracing Style was first introduced in The C Programming Language by Brian Kernighan and Dennis Ritchie.
+    </div>
+    <p><div id="BracesKnR">
+    The opening brace is placed at the end of the enclosing statement and
+    the closing brace is on a line on its own lined up with the
+    enclosing statement. Statements and declaration between the
+    braces are indented relative to the enclosing statement
+    Note that the opening brace of a function body is placed on a line on
+    its own lined up with the function declaration.
+    </div><div id="IndentLevel">
+    </div></p>
+    <h3><div id="IndentLevel">Braces shall be indented 2 columns to the right of the starting position of the enclosing statement or declaration</div></h3><div id="IndentLevel">
+    Example:
+    <pre><code class="c">
+void f(int a) {
+  int i;
+  if (a &gt; 0) {
+    i = a;
+  } else {
+    i = a;
+  }
+}
+    </code></pre>
+    </div>
+    <div id="FunctionParameterLineUp">
+      <h3>Function parameters shall be lined up with one parameter per line</h3> This allows enough space for Short comments after each parameter.
+    </div>
+    <div id="BracesLoop">
+      <h3>Loop and conditional statements shall always have brace enclosed
+    sub-statements</h3> The code looks more consistent if all conditional and loop statements have braces.
+    </div>
+    <p><div id="BracesLoop">
+    Even if there is only a single statement after the condition or loop
+    statement today, there might be a need for more code in the future.
+    </div><div id="BracesEmpty">
+    </div></p>
+    <h3><div id="BracesEmpty">Braces without any contents may be placed on the same line</div></h3><div id="BracesEmpty">
+    The only time when two braces can occur on the same line is when they do not
+    contain any code.
+    <pre><code class="c">while (...) {}</code></pre>
+    </div>
+    <div id="StmtPerLine">
+      <h3>Each statement shall be placed on a line on its own</h3> There is no need to make code compact. Putting several statements on the same line only makes the code cryptic to read.
+    </div>
+    <div id="ObjectPerDecl">
+      <h3>Declare each variable in a separate declaration</h3> This makes it easier to see all variables. It also avoids the problem of knowing which variables are pointers.
+        <pre><code class="c">int* p, i;</code></pre>
+      It is easy to forget that the star belongs to the declared name, not the type, and look at this and say that the type is "pointer to int" and both
+      <tt>p</tt> and
+      <tt>i</tt> are declared to this type.
+    </div>
+    <div id="PtrSpace">
+      <h3>For declaring pointers and reference the "*" and "&amp;" shall
+    be surrounded by spaces on both sides</h3>
+    </div>
+    <div id="OperSpace">
+      <h3>All binary arithmetic, bitwise and assignment operators and the ternary
+    conditional operator (?:) shall be surrounded by spaces; the comma operator
+    shall be followed by a space but not preceded; all other operators shall
+    not be used with spaces</h3>
+    </div>
+    <div id="LineLength">
+      <h3>Lines shall not exceed 78 characters</h3> Even if your editor handles long lines, other people may have set up their editors differently. Long lines in the code may also cause problems for other programs and printers.
+    </div>
+    <div id="TabsAvoid">
+      <h3>Do not use tabs</h3> Tabs make the source code difficult to read where different programs treat the tabs differently. The same code can look very differently in different views.
+      <p>
+        Avoid using tabs in your source code to avoid this problem. Use spaces instead.
+      </p>
+      <h2>Comments</h2>
+    </div>
+    <div id="CommentEnglish">
+      <h3>Comments shall be written in English</h3>
+    </div>
+    <div id="CommentDoxygen">
+      <h3>Use Doxygen comments</h3> The comment styles
+      <tt>///</tt> and
+      <tt>/** ... */</tt> are used by Doxygen, Doxygen and some other code documenting tools.
+    </div>
+    <div id="CommentMultiLine">
+      <h3>Multiple line comments shall be split in one comment per line,
+    each having the /* and */ markers on the same line</h3> Long comments which span several lines are difficult to follow. Having each line in the comment begin with
+      <tt>/*</tt> makes the comment much clearer and easy to identify. This also avoids problems where comments contain code and possibly nested comments.
+    </div>
+    <div id="CommentPlacement">
+      <h3>All comments shall be placed above the line the comment
+    describes, indented identically</h3> Being consistent on placement of comments removes any question on what the comment refers to.
+    </div>
+    <div id="CommentIfDef">
+      <h3>Use <tt>#ifdef</tt> instead of /* ... */ to comment out blocks
+    of code</h3> The code that is commented out may already contain comments which then terminate the block comment and causes lots of compile errors or other harder to find errors.
+    </div>
+    <div id="CommentFunction">
+      <h3>Every function shall have a comment that describes its purpose</h3>
+      <h2>Files</h2>
+    </div>
+    <div id="OneVisibleFunction">
+      <h3>There shall only be one externally visible function defined in
+    each header file</h3> Having as few declarations as possible in a header file reduces header dependencies.
+    </div>
+    <p><div id="OneVisibleFunction">
+    The header file shall have the same name as the function plus
+    extension <tt>h</tt>.
+    </div><div id="FileNameCase">
+    </div></p>
+    <h3><div id="FileNameCase">File name shall be treated as case sensitive</div></h3><div id="FileNameCase">
+    </div>
+    <div id="CFileExt">
+      <h3>C source files shall have extension "<tt>.c</tt>"</h3>
+    </div>
+    <div id="CHeaderExt">
+      <h3>C header files shall have extension "<tt>.h</tt>"</h3>
+    </div>
+    <div id="InlineFunctionDefineSeparate">
+      <h3>Inline functions shall be declared in header files and defined in inline
+    definition files</h3> The keyword
+      <tt>inline</tt> shall be used in both places.
+    </div>
+    <p><div id="InlineFunctionDefineSeparate">
+    Using a separate inline file is useful to keep the header files clean
+    and small.
+    The separation is also useful where the inlining is disabled in debug
+    builds.
+    The inline file is then included from the source file instead of the
+    header file to reduce compile time.
+    </div><div id="HeaderIncludeGuard">
+    </div></p>
+    <h3><div id="HeaderIncludeGuard">Header files must have include guards</div></h3><div id="HeaderIncludeGuard">
+    The include guard protects against the header file being included
+    multiple times.
+    <p>
+    Example:
+    </p><pre><code class="c">
+#ifndef FILE_H
+#define FILE_H
+...
+#endif
+    </code></pre>
+    or
+    <pre><code class="c">
+#pragma once
+    </code></pre>
+    </div>
+    <div id="IncludeGuardName">
+      <h3>The name of the macro used in the include guard shall have the same name
+    as the file (excluding the extension) followed by the suffix "_H"</h3>
+    </div>
+    <div id="HeaderSelfContained">
+      <h3>Header files shall be self-contained</h3> When a header is included, there shall not be a need to include any other headers first.
+      <p>
+        A simple way to make sure that a header file does not have any dependencies is to include it first in the corresponding source file. Example:
+      </p>
+        <pre><code class="c">
+/* foobar.h */
+#include "foobar.h"
+#include &lt;stdio.h&gt;
+    ...
+    </code></pre>
+    </div>
+    <div id="HeaderSystemUser">
+      <h3>System header files shall be included with &lt;&gt; and project
+    headers with ""</h3>
+    </div>
+    <div id="IncludeFirst">
+      <h3>Put <tt>#include</tt> directives at the top of files</h3> Having all
+      <tt>#include</tt> directives in one place makes it easy to find them.
+    </div>
+    <div id="IncludeAbsoluteAvoid">
+      <h3>Do not use absolute directory names in <tt>#include</tt>
+    directives</h3> The directory structure may be different on other systems.
+    </div>
+    <div id="IncludeRelativeAvoid">
+      <h3>Do not use relative directory names in <tt>#include</tt>
+    directives</h3> The directory structure of the project may change in the future. It is then difficult to correct all the directory names.
+    </div>
+    <div id="FunctionParameterNames">
+      <h3>Provide names of parameters in function declarations</h3> Parameter names are useful to document what the parameter is used for.
+    </div>
+    <p><div id="FunctionParameterNames">
+    The parameter names shall be the same in all declarations and
+    definitions of the function.
+    </div><div id="FunctionReturnType">
+    </div></p>
+    <h3><div id="FunctionReturnType">Always provide the return type explicitly</div></h3><div id="FunctionReturnType">
+    </div>
+    <div id="FunctionPointerTypedef">
+      <h3>Use a typedef to define a pointer to a function</h3> Pointers to functions have a strange syntax. The code becomes much clearer if you use a typedef for the pointer to function type. This typedef name can then be used to declare variables etc.
+        <pre><code class="c">
+double sin(double arg);
+typedef double (*trigfunc)(double arg);
+
+/* Usage examples */
+trigfunc myfunc = sin;
+void callfunc(trigfunc callback);
+trigfunc functable[10];
+    </code></pre>
+    </div>
+    <div id="GlobalVarAvoid">
+      <h3>Do not use global variables</h3> Global variables are initialised when the program starts whether it will be used or not.
+      <p>
+        If global variables are using other global variables for their initialisation there may be a problem if the dependent variables are not initialised yet. The initialisation order of global variables in different object files is not defined.
+      </p>
+      <h2>Statements</h2>
+    </div>
+    <div id="GotoForbid">
+      <h3>Never use gotos</h3> Gotos break structured coding.
+    </div>
+    <div id="BreakAvoid">
+      <h3>Do not use <tt>break</tt> in loops</h3> A
+      <tt>break</tt> statement is a goto statement in disguise and makes code less readable.
+    </div>
+    <p><div id="BreakAvoid">
+    A <tt>break</tt> statement is still acceptable in <tt>switch</tt> statements.
+    </div><div id="ContinueAvoid">
+    </div></p>
+    <h3><div id="ContinueAvoid">Do not use <tt>continue</tt> in loops</div></h3><div id="ContinueAvoid">
+    A <tt>continue</tt> statement is a goto statement in disguise and makes
+    code less readable.
+    </div>
+    <div id="FunctionOneExit">
+      <h3>Only have one return in a function</h3> It is confusing when there are more than one return statement in a function.
+      <p>
+        Having only one exit point of a function makes it easy to have a single place for post conditions and invariant check.
+      </p>
+      <p>
+        When debugging It is useful to have a single exit point of a function where you can put a single breakpoint or trace output.
+      </p>
+    </div>
+    <p><div id="FunctionOneExit">
+    It is sometimes necessary to introduce a result variable to carry the
+    function return value to the end of the function.
+    This is an acceptable compromise for structured code.
+    </div><div id="SwitchDefault">
+    </div></p>
+    <h3><div id="SwitchDefault">All switch statements shall have a default label</div></h3><div id="SwitchDefault">
+    Even if there is no action for the default label, it shall be included
+    to show that the programmer has considered values not covered by case
+    labels.
+    If the case labels cover all possibilities, it is useful to put an
+    assertion there to document the fact that it is impossible to get
+    here.
+    An assertion also protects from a future situation where a new
+    possibility is introduced by mistake.
+    </div>
+    <div id="DoWhileAvoid">
+      <h3>Do not use <tt>do-while</tt> loops</h3>
+      <tt>do-while</tt> loops are less readable than ordinary while loops and for loops since the conditional is at the bottom of the loop. The reader must scan the entire loop in order to understand the scope of the loop.
+      <p>
+        In addition, do-while loops are not needed. Any do-while loop can easily be rewritten into a while loop or a for loop. Reducing the number of constructs used enhance readability.
+      </p>
+      <h2>Other Typographical Issues</h2>
+    </div>
+    <div id="MagicNumberAvoid">
+    </div></p>
+    <h3><div id="MagicNumberAvoid">Do not use literal numbers other than 0 and 1</div></h3><div id="MagicNumberAvoid">
+    Use constants instead of literal numbers to make the code consistent
+    and easy to maintain.
+    The name of the constant is also used to document the purpose of the number.
+    </div>
+    <div id="AssertEncourage">
+      <h3>Use plenty of assertions</h3> Assertions are useful to verify pre-conditions, post-conditions and any other conditions that should never happen. Pre-conditions are useful to verify that functions are called with valid arguments. They are also useful as documentation of what argument value ranges a function is designed to work with.
+      <p>
+        Assertions are macros that print error messages when the condition is not met. The macros are disabled in release mode and do not cost anything in performance or used memory in the end product.
+      </p>
+      <p>
+        Example: This square root function is only designed to work with positive numbers.
+      </p>
+        <pre><code class="c">
+#include &lt;assert.h&gt;
+
+double sqrt(double x) {
+  // precondition: x is positive
+  assert(x &gt; 0);
+  double result;
+  ...
+  // postcondition: result^2 ~= x
+  assert(abs(result*result-x)/x &lt; 1E-8);
+}
+    </code></pre>
+    </div>
+    <div id="ConditionsExplicitBool">
+      <h3>Do not rely on implicit conversion to bool in conditions</h3>
+        <pre><code class="c">
+if (ptr)         // wrong
+if (ptr != NULL) // ok
+    </code></pre>
+  </div>
+    <hr>
+      <small>Generated 2017-12-05 by <a href="http://www.rosvall.ie/CSG">Coding Standard Generator</a> version 1.13. HTML and style modifed by <a href="https://howderek.com/">Derek Howard</a></small>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>
