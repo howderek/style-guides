@@ -157,7 +157,7 @@ int main(int argc, char** argv) {
     not be used with spaces</a>
       </li>
       <li><a href="#LineLength">
-    Lines shall not exceed 78 characters</a>
+    Lines shall not exceed 80 characters</a>
       </li>
       <li><a href="#TabsAvoid">
     Do not use tabs</a>
@@ -178,10 +178,6 @@ int main(int argc, char** argv) {
       <li><a href="#CommentPlacement">
     All comments shall be placed above the line the comment
     describes, indented identically</a>
-      </li>
-      <li><a href="#CommentIfDef">
-    Use <tt>#ifdef</tt> instead of /* ... */ to comment out blocks
-    of code</a>
       </li>
       <li><a href="#CommentFunction">
     Every function shall have a comment that describes its purpose</a>
@@ -227,10 +223,6 @@ int main(int argc, char** argv) {
     Do not use absolute directory names in <tt>#include</tt>
     directives</a>
       </li>
-      <li><a href="#IncludeRelativeAvoid">
-    Do not use relative directory names in <tt>#include</tt>
-    directives</a>
-      </li>
     </ul>
     <h3>Declarations</h3>
     <ul>
@@ -249,18 +241,6 @@ int main(int argc, char** argv) {
     </ul>
     <h3>Statements</h3>
     <ul>
-      <li><a href="#GotoForbid">
-    Never use gotos</a>
-      </li>
-      <li><a href="#BreakAvoid">
-    Do not use <tt>break</tt> in loops</a>
-      </li>
-      <li><a href="#ContinueAvoid">
-    Do not use <tt>continue</tt> in loops</a>
-      </li>
-      <li><a href="#FunctionOneExit">
-    Only have one return in a function</a>
-      </li>
       <li><a href="#SwitchDefault">
     All switch statements shall have a default label</a>
       </li>
@@ -374,7 +354,7 @@ void f(int a) {
     not be used with spaces</h3>
     </div>
     <div id="LineLength">
-      <h3>Lines shall not exceed 78 characters</h3> Even if your editor handles long lines, other people may have set up their editors differently. Long lines in the code may also cause problems for other programs and printers.
+      <h3>Lines shall not exceed 80 characters</h3> Even if your editor handles long lines, other people may have set up their editors differently. Long lines in the code may also cause problems for other programs and printers.
     </div>
     <div id="TabsAvoid">
       <h3>Do not use tabs</h3> Tabs make the source code difficult to read where different programs treat the tabs differently. The same code can look very differently in different views.
@@ -399,10 +379,6 @@ void f(int a) {
     <div id="CommentPlacement">
       <h3>All comments shall be placed above the line the comment
     describes, indented identically</h3> Being consistent on placement of comments removes any question on what the comment refers to.
-    </div>
-    <div id="CommentIfDef">
-      <h3>Use <tt>#ifdef</tt> instead of /* ... */ to comment out blocks
-    of code</h3> The code that is commented out may already contain comments which then terminate the block comment and causes lots of compile errors or other harder to find errors.
     </div>
     <div id="CommentFunction">
       <h3>Every function shall have a comment that describes its purpose</h3>
@@ -483,10 +459,6 @@ void f(int a) {
       <h3>Do not use absolute directory names in <tt>#include</tt>
     directives</h3> The directory structure may be different on other systems.
     </div>
-    <div id="IncludeRelativeAvoid">
-      <h3>Do not use relative directory names in <tt>#include</tt>
-    directives</h3> The directory structure of the project may change in the future. It is then difficult to correct all the directory names.
-    </div>
     <div id="FunctionParameterNames">
       <h3>Provide names of parameters in function declarations</h3> Parameter names are useful to document what the parameter is used for.
     </div>
@@ -516,35 +488,7 @@ trigfunc functable[10];
       </p>
       <h2>Statements</h2>
     </div>
-    <div id="GotoForbid">
-      <h3>Never use gotos</h3> Gotos break structured coding.
-    </div>
-    <div id="BreakAvoid">
-      <h3>Do not use <tt>break</tt> in loops</h3> A
-      <tt>break</tt> statement is a goto statement in disguise and makes code less readable.
-    </div>
-    <p><div id="BreakAvoid">
-    A <tt>break</tt> statement is still acceptable in <tt>switch</tt> statements.
-    </div><div id="ContinueAvoid">
-    </div></p>
-    <h3><div id="ContinueAvoid">Do not use <tt>continue</tt> in loops</div></h3><div id="ContinueAvoid">
-    A <tt>continue</tt> statement is a goto statement in disguise and makes
-    code less readable.
-    </div>
-    <div id="FunctionOneExit">
-      <h3>Only have one return in a function</h3> It is confusing when there are more than one return statement in a function.
-      <p>
-        Having only one exit point of a function makes it easy to have a single place for post conditions and invariant check.
-      </p>
-      <p>
-        When debugging It is useful to have a single exit point of a function where you can put a single breakpoint or trace output.
-      </p>
-    </div>
-    <p><div id="FunctionOneExit">
-    It is sometimes necessary to introduce a result variable to carry the
-    function return value to the end of the function.
-    This is an acceptable compromise for structured code.
-    </div><div id="SwitchDefault">
+    <div id="SwitchDefault">
     </div></p>
     <h3><div id="SwitchDefault">All switch statements shall have a default label</div></h3><div id="SwitchDefault">
     Even if there is no action for the default label, it shall be included
